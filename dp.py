@@ -20,16 +20,19 @@ def timed_inference(model, question: str, context: str, print_q_v: bool = True):
     print(Fore.GREEN + f"[{predict_time:.3f}] Predicted: `{prediction}`")
 
 
-model = build_model(configs.squad.squad)
+if __name__ == "__main__":
+    model = build_model(configs.squad.squad)
 
-timed_inference(model, "Раз два три четыре пять вышел зайчик что делать?", "Поплавать. Погулять. Покурить. Попрыгать.")
+    timed_inference(
+        model, "Раз два три четыре пять вышел зайчик что делать?", "Поплавать. Погулять. Покурить. Попрыгать."
+    )
 
-question: str = ""
-try:
-    while question != "q":
-        question = input(Fore.BLUE + "Вопрос: ")
-        variants: str = input(Fore.YELLOW + "Варианты: ")
+    question: str = ""
+    try:
+        while question != "q":
+            question = input(Fore.BLUE + "Вопрос: ")
+            variants: str = input(Fore.YELLOW + "Варианты: ")
 
-        timed_inference(model, question, variants, print_q_v=False)
-except KeyboardInterrupt:
-    print(Fore.RED + "Abort")
+            timed_inference(model, question, variants, print_q_v=False)
+    except KeyboardInterrupt:
+        print(Fore.RED + "Abort")

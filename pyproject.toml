@@ -8,12 +8,14 @@ authors = ["Anton Gavrilov <anton.gavrilov@raiffeisen.ru>"]
 python = ">=3.7,<3.9"
 deeppavlov = "^0.14.0"
 colorama = "^0.4.4"
+Flask = "^2.0.2"
 jupyterlab = "^3.2.3"
 tensorflow = "1.15.2"
 pandas = "0.25.3"
 
 [tool.poetry.dev-dependencies]
 jupyterlab = "^3.2.3"
+black = "^21.10b0"
 
 
 [build-system]
