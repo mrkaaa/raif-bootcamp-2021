@@ -1,8 +1,3 @@
-[[tool.poetry.source]]
-name = "raif"
-url = "https://artifactory.raiffeisen.ru/artifactory/api/pypi/remote-pypi/simple"
-default = true
-
 [tool.poetry]
 name = "deeppavlov_test"
 version = "0.1.0"
