@@ -57,7 +57,7 @@
 В `/result_question` приходит:
 
 ```json
-{   
+{
     'number of game': 5,
     'question': "Что есть у Пескова?",
     'answer': 1,

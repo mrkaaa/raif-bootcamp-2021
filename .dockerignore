@@ -4,3 +4,4 @@ data
 *.ipynb
 Dockerfile
 *.pyc
+data.ms
