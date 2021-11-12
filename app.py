@@ -16,7 +16,7 @@ LOGGER: logging.Logger = logging.getLogger("RaifGPT-3")
 
 @APP.route("/predict", methods=["POST"])
 def predict():
-    data: dict = request.form.get("data")
+    data: dict = request.form
 
     question: str = data["question"]
     variants: typing.List[str] = [data["answer_1"], data["answer_2"], data["answer_3"], data["answer_4"]]
@@ -31,4 +31,4 @@ def result_question():
 
 
 if __name__ == "__main__":
-    APP.run(host="127.0.0.1", port=12304)
+    APP.run(host="127.0.0.1", port=12304, debug=True)
