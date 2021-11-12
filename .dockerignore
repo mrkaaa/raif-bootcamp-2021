@@ -1,0 +1,5 @@
+bin
+data
+.ipynb_checkpoints
+*.ipynb
+Dockerfile
