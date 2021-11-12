@@ -31,7 +31,7 @@
     'answer_4': "Третья нога",
     'question money': 4000,
     'saved money': 1000,
-    'available help': ["fifty fifty", "can mistake", "take money"]
+    'available help': ["fifty fifty", "can mistake", "new question"]
 }
 ```
 
