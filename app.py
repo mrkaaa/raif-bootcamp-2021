@@ -15,7 +15,7 @@ RL_MODEL: RLModel = RLModel()
 LOGGER: logging.Logger = logging.getLogger("RaifGPT-3")
 
 
-@APP.route("/predict", methods=["POST"])
+@APP.route("/predict2", methods=["POST"])
 def predict():
     data: dict = request.form
     available_help = set(data["available help"])
@@ -40,7 +40,7 @@ def predict():
     return {"answer": prediction}
 
 
-@APP.route("/predict2", methods=["POST"])
+@APP.route("/predict", methods=["POST"])
 def predict2():
     data: dict = request.form
     available_help = set(data["available help"])
