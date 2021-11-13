@@ -98,7 +98,7 @@ class RLModel:
             prediction = float(torch.argmax(probs))
 
         except ValueError:
-                prediction = self.model.sample_greedy(state)
+            prediction = self.model.sample_greedy(state)
 
         if prediction == 4.:
             return {"end game": "take money"}
