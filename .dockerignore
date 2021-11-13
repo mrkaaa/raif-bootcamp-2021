@@ -5,3 +5,5 @@ data
 Dockerfile
 *.pyc
 data.ms
+data/wiki
+data/elastic
