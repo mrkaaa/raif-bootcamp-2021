@@ -89,10 +89,20 @@ class RLModel:
 
     def predict(self, variants: typing.List[str], question: str) -> int:
         state = self.get_state(variants, question)
-        prediction = self.model.sample_greedy(state)
+
+        try:
+            incorrect_index = variants.index("Неверный ответ")
+            agent_outputs = self.model.step(state[None, ...])
+            probs = agent_outputs[0][0]
+            probs[incorrect_index] = 0
+            prediction = float(torch.argmax(probs))
+
+        except ValueError:
+                prediction = self.model.sample_greedy(state)
 
         if prediction == 4.:
             return {"end game": "take money"}
+
         return {"answer": prediction + 1}
 
     def get_state(self, variants, question):
