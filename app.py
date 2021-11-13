@@ -28,7 +28,7 @@ def predict():
 
     prediction, score = MODEL.predict(variants, question)
 
-    if score > 28 and data["question money"] != 2000:
+    if score > 28 and data["question money"] not in (100, 2000):
         if "new question" in available_help:
             return {"help": "new question"}
         if "can mistake" in available_help:
