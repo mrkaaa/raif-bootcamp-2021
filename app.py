@@ -58,7 +58,8 @@ def predict2():
     saved_money = int(data["saved money"][0])
 
     variants: typing.List[str] = [
-        data[x][0] if data[x][0] is not None else "Неверный ответ" for x in ["answer_2", "answer_3", "answer_4"]
+        data[x][0] if data[x][0] is not None else "Неверный ответ"
+        for x in ["answer_1", "answer_2", "answer_3", "answer_4"]
     ]
     if saved_money > 4000:
         return {"end game": "take money"}
