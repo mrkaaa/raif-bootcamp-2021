@@ -17,13 +17,14 @@ LOGGER: logging.Logger = logging.getLogger("RaifGPT-3")
 
 @APP.route("/predict", methods=["POST"])
 def predict():
-    data: dict = request.form
+    data: dict = request.form.to_dict(flat=False)
     available_help = set(data["available help"])
-    question: str = data["question"]
+    question: str = data["question"][0]
+    all_variants = [data[x][0] for x in ["answer_1", "answer_2", "answer_3", "answer_4"]]
     variants: typing.List[str] = [
-        data[x]
+        data[x][0]
         for x in ["answer_1", "answer_2", "answer_3", "answer_4"]
-        if data[x] and data[x].lower() != "неверный ответ"
+        if data[x][0] and data[x].lower() != "неверный ответ"
     ]
 
     prediction, score = MODEL.predict(variants, question)
@@ -31,10 +32,12 @@ def predict():
     if score > 35 and data["question money"] not in (100, 2000):
         if "new question" in available_help:
             return {"help": "new question"}
-        if "can mistake" in available_help:
-            return {"answer": prediction, "help": "can mistake"}
         if "fifty fifty" in available_help:
             return {"help": "fifty fifty"}
+        if "can mistake" in available_help:
+            return {"answer": prediction, "help": "can mistake"}
+        if len(variants) == 1:
+            return {"answer": [i for i, v in enumerate(all_variants, 1) if v is not None][0]}
         return {"end game": "take money"}
 
     return {"answer": prediction}
