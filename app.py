@@ -57,7 +57,9 @@ def predict2():
     question: str = data["question"][0]
     saved_money = int(data["saved money"][0])
 
-    variants: typing.List[str] = [data[x][0] for x in ["answer_1", "answer_2", "answer_3", "answer_4"]]
+    variants: typing.List[str] = [
+        data[x][0] if data[x][0] is not None else "Неверный ответ" for x in ["answer_2", "answer_3", "answer_4"]
+    ]
     if saved_money > 4000:
         return {"end game": "take money"}
     prediction = RL_MODEL.predict(variants, question)
