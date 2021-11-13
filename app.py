@@ -58,4 +58,4 @@ def result_question():
 
 
 if __name__ == "__main__":
-    APP.run(host="0.0.0.0", port=12304, debug=True)
+    APP.run(host="0.0.0.0", port=12304)
