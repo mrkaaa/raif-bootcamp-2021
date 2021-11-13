@@ -22,9 +22,8 @@ def predict():
     question: str = data["question"][0]
     all_variants = [data[x][0] for x in ["answer_1", "answer_2", "answer_3", "answer_4"]]
     variants: typing.List[str] = [
-        data[x][0]
+        data[x][0] if data[x][0] and data[x][0].lower() != "неверный ответ" else "_"
         for x in ["answer_1", "answer_2", "answer_3", "answer_4"]
-        if data[x][0] and data[x][0].lower() != "неверный ответ"
     ]
 
     prediction, score = MODEL.predict(variants, question)

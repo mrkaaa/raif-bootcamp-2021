@@ -1,13 +1,14 @@
 import difflib
 import typing
 
-from transformers import BertTokenizer, BertModel
 import numpy as np
 import pandas as pd
+import torch
+from transformers import BertModel, BertTokenizer
+
+from model_data import DATA_PATH
 from rl.agent import SimpleNNAgent
 from rl.rl_env import str_to_embbeding
-from model_data import DATA_PATH
-import torch
 
 
 class RuBertModel:
@@ -70,6 +71,8 @@ class GPTModel:
         best_score: float = float("inf")
         best_id: int = -1
         for i, answer in enumerate(variants, start=1):
+            if answer == "_":
+                continue
             text: str = f"Вопрос: {question}. Ответ: {answer}."
             score = self.calc_ppl(self.tokenizer.encode(text, return_tensors="pt"))
 
@@ -83,34 +86,30 @@ class GPTModel:
 class RLModel:
     def __init__(self):
         self.model = SimpleNNAgent((5, 768), 5)
-        self.model.load_state_dict(torch.load(f'{DATA_PATH}/torch_model'))
-        self.tokenizer = BertTokenizer.from_pretrained('DeepPavlov/rubert-base-cased-sentence')
-        self.bertmodel = BertModel.from_pretrained('DeepPavlov/rubert-base-cased-sentence')
+        self.model.load_state_dict(torch.load(f"{DATA_PATH}/torch_model"))
+        self.tokenizer = BertTokenizer.from_pretrained("DeepPavlov/rubert-base-cased-sentence")
+        self.bertmodel = BertModel.from_pretrained("DeepPavlov/rubert-base-cased-sentence")
 
     def predict(self, variants: typing.List[str], question: str) -> int:
         state = self.get_state(variants, question)
         prediction = self.model.sample_greedy(state)
 
-        if prediction == 4.:
+        if prediction == 4.0:
             return {"end game": "take money"}
         return {"answer": prediction + 1}
 
     def get_state(self, variants, question):
-        sample = pd.DataFrame(['x'], columns=['question'])
+        sample = pd.DataFrame(["x"], columns=["question"])
 
-        sample['question'] = question
+        sample["question"] = question
 
         for index, variant in enumerate(variants):
-            sample[f'variant_{index}'] = variant
+            sample[f"variant_{index}"] = variant
 
         cols = sample.columns.values
         for column in cols:
-            sample[f'emb_{column}'] = str_to_embbeding(sample[f'{column}'],
-                                                       self.tokenizer,
-                                                       self.bertmodel)
+            sample[f"emb_{column}"] = str_to_embbeding(sample[f"{column}"], self.tokenizer, self.bertmodel)
             sample = sample.drop(columns=[column])
-        sample['state'] = sample.to_numpy().tolist()
+        sample["state"] = sample.to_numpy().tolist()
 
         return sample.state.apply(lambda x: np.array(x)).iloc[0]
-
-
