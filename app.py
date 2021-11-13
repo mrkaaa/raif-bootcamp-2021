@@ -46,8 +46,27 @@ def predict2():
     available_help = set(data["available help"])
     question: str = data["question"]
     variants: typing.List[str] = [data[x] for x in ["answer_1", "answer_2", "answer_3", "answer_4"]]
-
+    if data['saved money'] > 4000:
+        return {"end game": "take money"}
     prediction = RL_MODEL.predict(variants, question)
+
+    if (data['saved money'] < 10) and prediction == {"end game": "take money"}:
+        variants: typing.List[str] = [
+            data[x]
+            for x in ["answer_1", "answer_2", "answer_3", "answer_4"]
+            if data[x] and data[x].lower() != "неверный ответ"
+            ]
+        prediction, score = MODEL.predict(variants, question)
+
+        if score > 35:
+            if "new question" in available_help:
+                return {"help": "new question"}
+            if "can mistake" in available_help:
+                return {"answer": prediction, "help": "can mistake"}
+            if "fifty fifty" in available_help:
+                return {"help": "fifty fifty"}
+        return {"answer": prediction}
+
     return prediction
 
 
