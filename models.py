@@ -83,7 +83,7 @@ class GPTModel:
 class RLModel:
     def __init__(self):
         self.model = SimpleNNAgent((5, 768), 5)
-        self.model.load_state_dict(DATA_PATH)
+        self.model.load_state_dict(torch.load(f'{DATA_PATH}/torch_model'))
         self.tokenizer = BertTokenizer.from_pretrained('DeepPavlov/rubert-base-cased-sentence')
         self.bertmodel = BertModel.from_pretrained('DeepPavlov/rubert-base-cased-sentence')
 
@@ -93,7 +93,7 @@ class RLModel:
 
         if prediction == 4.:
             return {"end game": "take money"}
-        return {"answer": prediction +1}
+        return {"answer": prediction + 1}
 
     def get_state(self, variants, question):
         sample = pd.DataFrame(['x'], columns=['question'])

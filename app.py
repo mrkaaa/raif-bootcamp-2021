@@ -4,13 +4,14 @@ import typing
 
 from flask import Flask, request
 
-from models import GPTModel, RuBertModel
+from models import GPTModel, RuBertModel, RLModel
 
 
 logging.basicConfig(level=logging.INFO)
 
 APP: Flask = Flask(__name__)
 MODEL: GPTModel = GPTModel("sberbank-ai/rugpt3large_based_on_gpt2")
+RL_MODEL: RLModel = RLModel()
 LOGGER: logging.Logger = logging.getLogger("RaifGPT-3")
 
 
@@ -33,6 +34,17 @@ def predict():
         return {"end game": "take money"}
 
     return {"answer": prediction}
+
+
+@APP.route("/predict2", methods=["POST"])
+def predict2():
+    data: dict = request.form
+    available_help = set(data["available help"])
+    question: str = data["question"]
+    variants: typing.List[str] = [data[x] for x in ["answer_1", "answer_2", "answer_3", "answer_4"] if data[x]]
+
+    prediction = MODEL.predict(variants, question)
+    return prediction
 
 
 @APP.route("/result_question", methods=["POST"])
