@@ -43,7 +43,7 @@ def predict2():
     question: str = data["question"]
     variants: typing.List[str] = [data[x] for x in ["answer_1", "answer_2", "answer_3", "answer_4"] if data[x]]
 
-    prediction = MODEL.predict(variants, question)
+    prediction = RL_MODEL.predict(variants, question)
     return prediction
 
 
