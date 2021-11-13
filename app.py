@@ -4,7 +4,7 @@ import typing
 
 from flask import Flask, request
 
-from models import GPTModel, RuBertModel, RLModel
+from models import GPTModel, RLModel, RuBertModel
 
 
 logging.basicConfig(level=logging.INFO)
@@ -20,11 +20,15 @@ def predict():
     data: dict = request.form
     available_help = set(data["available help"])
     question: str = data["question"]
-    variants: typing.List[str] = [data[x] for x in ["answer_1", "answer_2", "answer_3", "answer_4"] if data[x]]
+    variants: typing.List[str] = [
+        data[x]
+        for x in ["answer_1", "answer_2", "answer_3", "answer_4"]
+        if data[x] and data[x].lower() != "неверный ответ"
+    ]
 
     prediction, score = MODEL.predict(variants, question)
 
-    if score > 28 and data['question money'] != 2000:
+    if score > 28 and data["question money"] != 2000:
         if "new question" in available_help:
             return {"help": "new question"}
         if "can mistake" in available_help:
@@ -41,9 +45,9 @@ def predict2():
     data: dict = request.form
     available_help = set(data["available help"])
     question: str = data["question"]
-    variants: typing.List[str] = [data[x] for x in ["answer_1", "answer_2", "answer_3", "answer_4"] if data[x]]
+    variants: typing.List[str] = [data[x] for x in ["answer_1", "answer_2", "answer_3", "answer_4"]]
 
-    prediction = MODEL.predict(variants, question)
+    prediction = RL_MODEL.predict(variants, question)
     return prediction
 
 
