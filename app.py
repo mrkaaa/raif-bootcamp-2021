@@ -40,14 +40,24 @@ def predict():
     return {"answer": prediction}
 
 
+@APP.route("/predict_debug", methods=["POST"])
+def predict_debug():
+    data: dict = request.form.to_dict(flat=False)
+    LOGGER.info(data)
+
+    return data
+
+
 @APP.route("/predict", methods=["POST"])
 def predict2():
-    data: dict = request.form
+    data: dict = request.form.to_dict(flat=False)
+    LOGGER.info(data)
     available_help = set(data["available help"])
-    question: str = data["question"]
-    saved_money = int(data["saved money"])
+    LOGGER.info(data["available help"])
+    question: str = data["question"][0]
+    saved_money = int(data["saved money"][0])
 
-    variants: typing.List[str] = [data[x] for x in ["answer_1", "answer_2", "answer_3", "answer_4"]]
+    variants: typing.List[str] = [data[x][0] for x in ["answer_1", "answer_2", "answer_3", "answer_4"]]
     if saved_money > 4000:
         return {"end game": "take money"}
     prediction = RL_MODEL.predict(variants, question)
@@ -56,7 +66,7 @@ def predict2():
         variants: typing.List[str] = [
             data[x]
             for x in ["answer_1", "answer_2", "answer_3", "answer_4"]
-            if data[x] and data[x].lower() != "неверный ответ"
+            if data[x][0] and data[x][0].lower() != "неверный ответ"
         ]
         prediction, score = MODEL.predict(variants, question)
 
